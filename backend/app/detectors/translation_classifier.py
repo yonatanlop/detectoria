@@ -5,9 +5,13 @@ noise, and the classifier was trained on GPT-2-era text, not modern LLMs), so
 it is disabled by default and given the lowest aggregation weight when enabled.
 """
 
+import logging
+
 import torch
 
 from . import DetectorOutput
+
+logger = logging.getLogger("detectoria")
 
 _MAX_SPANISH_TOKENS = 1024  # bounds translation + classification compute cost
 
@@ -50,7 +54,11 @@ class TranslationClassifierDetector:
             if not chunk:
                 continue
             chunk_tensor = torch.tensor([chunk], dtype=torch.long)
-            generated = self.translator_model.generate(chunk_tensor, max_new_tokens=512)
+            generated = self.translator_model.generate(
+                chunk_tensor,
+                max_new_tokens=min(512, len(chunk) * 4 + 20),
+                no_repeat_ngram_size=3,
+            )
             translated_parts.append(
                 self.translator_tokenizer.decode(generated[0], skip_special_tokens=True)
             )
@@ -68,10 +76,12 @@ class TranslationClassifierDetector:
             chunk = input_ids[start : start + self.classifier_chunk_size]
             if not chunk:
                 continue
-            encoded = self.classifier_tokenizer.prepare_for_model(
-                chunk, add_special_tokens=True, return_tensors="pt"
-            )
-            logits = self.classifier_model(**encoded).logits[0]
+            encoded = self.classifier_tokenizer.prepare_for_model(chunk, add_special_tokens=True)
+            input_ids = torch.tensor([encoded["input_ids"]], dtype=torch.long)
+            model_kwargs = {"input_ids": input_ids}
+            if "attention_mask" in encoded:
+                model_kwargs["attention_mask"] = torch.tensor([encoded["attention_mask"]], dtype=torch.long)
+            logits = self.classifier_model(**model_kwargs).logits[0]
             probs = torch.softmax(logits, dim=-1)
             fake_prob = float(probs[self._fake_label_index].item())
             weighted_fake_prob += fake_prob * len(chunk)
@@ -91,6 +101,7 @@ class TranslationClassifierDetector:
                 "menos confiable por la doble indirección (traducción + modelo antiguo)."
             )
         except Exception as exc:  # pragma: no cover - defensive fallback for an optional source
+            logger.exception("Fuente D (traducción+clasificador) falló, usando valor neutral")
             score = 0.5
             details = f"No se pudo completar esta fuente experimental ({exc}); se usó un valor neutral."
 
