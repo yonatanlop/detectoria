@@ -1,0 +1,19 @@
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+# Python / backend
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.venv/
+*.pyc
+
+# Env
+.env
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      args:
+        ENABLE_TRANSLATION_CLASSIFIER: ${ENABLE_TRANSLATION_CLASSIFIER:-false}
+    environment:
+      ENABLE_TRANSLATION_CLASSIFIER: ${ENABLE_TRANSLATION_CLASSIFIER:-false}
+    restart: unless-stopped
+    mem_limit: 8g
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    mem_limit: 256m
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

@@ -1,0 +1,48 @@
+# Compose para DESPLIEGUE (Oracle Cloud u otro servidor).
+# Usa las imágenes ya construidas por GitHub Actions en ghcr.io — no compila
+# nada en el servidor.
+#
+#   docker compose -f docker-compose.deploy.yml pull
+#   docker compose -f docker-compose.deploy.yml up -d
+#
+# El frontend NO publica el puerto 80 al host: en este servidor ya hay un
+# Caddy de otro proyecto ocupando 80/443, así que el frontend se conecta a la
+# red externa "edge" para que ese Caddy lo alcance como reverse proxy.
+# Ver deploy/shared-caddy.md para el detalle de esa integración.
+#
+# Requiere un archivo .env en el mismo directorio (ver .env.example) y que
+# exista la red externa: docker network create edge
+
+services:
+  backend:
+    image: ghcr.io/yonatanlop/detectoria-backend:${IMAGE_TAG:-latest}
+    container_name: detectoria-backend
+    restart: unless-stopped
+    environment:
+      ENABLE_TRANSLATION_CLASSIFIER: ${ENABLE_TRANSLATION_CLASSIFIER:-false}
+    mem_limit: 4g
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    expose:
+      - "8000"
+
+  frontend:
+    image: ghcr.io/yonatanlop/detectoria-frontend:${IMAGE_TAG:-latest}
+    container_name: detectoria-frontend
+    restart: unless-stopped
+    mem_limit: 256m
+    depends_on:
+      - backend
+    expose:
+      - "80"
+    networks:
+      - default
+      - edge
+
+networks:
+  edge:
+    external: true
