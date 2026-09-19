@@ -13,21 +13,32 @@ documentados.
   hasta intentos deliberados de sonar más natural/casual (un correo laboral,
   una anécdota personal simulada), para ver si el ensemble los sigue
   detectando o si el estilo casual lo engaña.
-- **`textos/humano/`** (5 archivos): textos de dominio público de autoría
-  humana verificada — Cervantes (*Quijote*, 1605), Simón Bolívar (*Carta de
-  Jamaica*, 1815), José Martí (*Nuestra América*, 1891), el preámbulo de la
-  Constitución de Colombia (1991) y Sarmiento (*Facundo*, 1845). Todos con
-  texto verificado contra fuentes confiables antes de incluirlos.
+- **`textos/humano/`** (9 archivos): textos de dominio público de autoría
+  humana verificada, con registros variados a propósito:
+  - Formal/político-histórico: Simón Bolívar (*Carta de Jamaica*, 1815),
+    José Martí (*Nuestra América*, 1891), preámbulo de la Constitución de
+    Colombia (1991).
+  - Narrativo/literario: Cervantes (*Quijote*, 1605), Ricardo Palma
+    (*Tradiciones peruanas*, 1877), Iriarte (fábula *El burro flautista*, 1782).
+  - Ensayo/opinión conversacional: Larra (*El castellano viejo*, 1832) —
+    el más cercano en tono a un artículo de opinión moderno del set.
+  - Divulgación científica: Ramón y Cajal (*Reglas y consejos sobre
+    investigación científica*, 1897) — contraste directo con la muestra de
+    IA `06_explicacion_educativa.txt`.
+  - Sarmiento (*Facundo*, 1845), invocación retórica.
 
-**Limitación**: los 5 textos humanos son de registro literario/formal e
-histórico — no hay todavía ningún ejemplo de escritura humana casual y
-contemporánea (un chat, un correo informal, un comentario de foro), que es
-justamente el registro que más importa para el caso de uso real (ensayos,
-tareas, documentos actuales). No lo inventé yo mismo para no mezclar texto
-generado por IA disfrazado de "humano casual" dentro del set de referencia —
-eso invalidaría la medición. Si querés un set más representativo, sumá 3-5
-textos tuyos (algo que hayas escrito vos: un correo, un mensaje largo, una
-opinión) como archivos `.txt` nuevos en `textos/humano/`.
+  Todos con texto verificado contra fuentes confiables antes de incluirlos.
+
+**Limitación que sigue vigente**: aun con más variedad de registro, todos
+son textos de los siglos XVI-XX — no hay ningún ejemplo de escritura humana
+**contemporánea** (un chat, un correo actual, un comentario de foro de 2020
+en adelante), que es el registro que más importa para el caso de uso real
+(ensayos, tareas, documentos actuales). No lo inventé yo mismo para no
+mezclar texto generado por IA disfrazado de "humano casual" dentro del set
+de referencia — eso invalidaría la medición. Si querés un set realmente
+representativo, sumá 3-5 textos tuyos (algo que hayas escrito vos: un
+correo, un mensaje largo, una opinión) como archivos `.txt` nuevos en
+`textos/humano/`.
 
 ## Cómo correrlo
 
