@@ -20,7 +20,7 @@ para una decisión académica o disciplinaria.
 | A. Estilometría | Heurísticas (burstiness de oraciones, riqueza de vocabulario, puntuación, repetición) | Sin modelo, gratis |
 | B. Perplejidad/burstiness | LM en español (`mrm8488/spanish-gpt2`) | Modelo abierto, gratis |
 | C. Rank/entropía de tokens | Estilo GLTR, reutiliza el forward pass de la fuente B | Sin costo adicional |
-| D. Traducción + clasificador EN (opcional) | `Helsinki-NLP/opus-mt-es-en` + `roberta-base-openai-detector` | Modelos abiertos, gratis (desactivada por defecto) |
+| D. Traducción + clasificador EN | `Helsinki-NLP/opus-mt-es-en` + `roberta-base-openai-detector` | Modelos abiertos, gratis (activada en el despliegue; togglable con `ENABLE_TRANSLATION_CLASSIFIER`) |
 
 Ver el detalle de diseño y las limitaciones de cada fuente en los docstrings
 de `backend/app/detectors/`.

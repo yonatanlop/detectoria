@@ -20,13 +20,13 @@ services:
     restart: unless-stopped
     environment:
       ENABLE_TRANSLATION_CLASSIFIER: ${ENABLE_TRANSLATION_CLASSIFIER:-false}
-    mem_limit: 4g
+    mem_limit: 6g
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
+      start_period: 90s
     expose:
       - "8000"
 
