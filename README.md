@@ -80,3 +80,10 @@ el frontend para `amd64`+`arm64`.
   [`deploy/shared-caddy.md`](deploy/shared-caddy.md), usando
   `docker-compose.deploy.yml` (imágenes ya construidas, sin build en el
   servidor).
+
+## Validación de exactitud
+
+[`validation/`](validation/README.md) tiene un set de textos de autoría
+conocida (humana verificada vs. IA) y un script para medir la exactitud real
+del ensemble contra un despliegue en vivo, en vez de calibrar a ojo con un
+solo documento o contra otra herramienta de terceros.
